@@ -1333,6 +1333,23 @@ static BOOL _isAutolaunchChecked = NO;
           [_hidden_main makeMainWindow];
           _hidden_main = nil;
         }
+
+      // Bring all app windows forward, including minimized ones
+      BOOL hasAnyWindow = NO;
+      NSArray *windows = [self windows];
+      for (NSWindow *win in windows)
+        {
+          if ([win isMiniaturized])
+            {
+              [win deminiaturize: nil];
+              hasAnyWindow = YES;
+            }
+          else if ([win isVisible])
+            {
+              [win orderFrontRegardless];
+              hasAnyWindow = YES;
+            }
+        }
       
       if ([self keyWindow] != nil)
         {
